@@ -20,8 +20,19 @@ export default function LoginScreen() {
     handlePasswordChange,
     validateForm,
   } = useLoginForm();
-  const { login } = useAuth();
-  const { handleGoogleLogin, handleAppleLogin } = useOAuth();
+  const { login, loginWithOAuth } = useAuth();
+  const { handleGoogleLogin, handleAppleLogin } = useOAuth({
+    onSuccess: async (credential) => {
+      const success = await loginWithOAuth(credential);
+      if (success) {
+        router.replace('/(tabs)');
+      }
+    },
+    onError: (error, provider) => {
+      console.error(`${provider} login failed:`, error);
+      // 에러 처리
+    }
+  });
 
   const [loginError, setLoginError] = useState('');
 
