@@ -1,9 +1,9 @@
 import React from "react";
 import { YStack, Text, Button } from "tamagui";
-import { IconSymbol } from "../ui/IconSymbol";
+import { Ionicons } from "@expo/vector-icons";
 
 interface CategoryCardProps {
-  icon: string;
+  icon: keyof typeof Ionicons.glyphMap;
   title: string;
   onPress: () => void;
 }
@@ -20,7 +20,7 @@ export function CategoryCard({ icon, title, onPress }: CategoryCardProps) {
       pressStyle={{ opacity: 0.8 }}
     >
       <YStack flex={1} alignItems='center' justifyContent='center' space='$2'>
-        <IconSymbol name={icon} size={32} color='$primary' />
+        <Ionicons name={icon} size={32} color='$primary' />
         <Text fontSize='$3' color='$gray12'>
           {title}
         </Text>
