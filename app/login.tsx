@@ -128,23 +128,17 @@ export default function LoginScreen() {
             />
           </View>
 
-          { (errors || loginError) && (
-              <View style={ styles.errorContainer }>
-                { errors && Object.entries(errors).map(([field, error]) => (
-                    <Text
-                        key={ field }
-                        style={ styles.error }
-                    >
-                      { error?.message?.toString() || '' }
-                    </Text>
-                )) }
-                { loginError && (
-                    <Text style={ styles.error }>
-                      { loginError }
-                    </Text>
-                ) }
-              </View>
-          ) }
+          {errors && Object.entries(errors).map(([field, error]) => {
+            const errorMessage = error?.message?.toString() || '';
+            return (
+                <Text
+                    key={field}
+                    style={styles.error}
+                >
+                  {errorMessage}
+                </Text>
+            );
+          })}
 
           <View style={ styles.buttonContainer }>
             <TouchableOpacity
