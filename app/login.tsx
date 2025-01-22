@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, TextInput, TouchableOpacity, Animated, Dimensions, View } from 'react-native';
+import { StyleSheet, Text, TextInput, TouchableOpacity, Animated, Dimensions, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 import { useAuth } from '@/contexts/AuthContext';
@@ -20,16 +20,18 @@ export default function LoginScreen() {
     handlePasswordChange,
     validateForm,
   } = useLoginForm();
+
+
   const { login, loginWithOAuth } = useAuth();
   const { handleGoogleLogin, handleAppleLogin } = useOAuth({
     onSuccess: async (credential) => {
       const success = await loginWithOAuth(credential);
-      if (success) {
+      if(success) {
         router.replace('/(tabs)');
       }
     },
     onError: (error, provider) => {
-      console.error(`${provider} login failed:`, error);
+      console.error(`${ provider } login failed:`, error);
       // 에러 처리
     }
   });
@@ -37,13 +39,18 @@ export default function LoginScreen() {
   const [loginError, setLoginError] = useState('');
 
   const handleLogin = async () => {
-    if (!validateForm()) {
+    if(__DEV__) { // 개발모드에서만 하드코딩 로그인 메시지 표시
+      console.log('개발모드: 테스트계정 로그인 완료');
+    }
+
+    if(!validateForm()) {
+      console.log('Form validation failed')
       return;
     }
 
     try {
       const success = await login(email, password);
-      if (success) {
+      if(success) {
         router.replace('/(tabs)');
       } else {
         setLoginError('로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요.');
@@ -81,62 +88,77 @@ export default function LoginScreen() {
 
   return (
       <LinearGradient
-          colors={['#52BEB5', '#73B2D9', '#FFE5E5']}
-          style={styles.container}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}>
+          colors={ ['#52BEB5', '#73B2D9', '#FFE5E5'] }
+          style={ styles.container }
+          start={ { x: 0, y: 0 } }
+          end={ { x: 1, y: 1 } }
+      >
         <Animated.View
-            style={[
+            style={ [
               styles.backgroundPattern,
               {
                 transform: [{ rotate: spin }],
               },
-            ]}
+            ] }
         />
-        <ThemedView style={styles.formContainer}>
-          {/* View를 사용하여 텍스트 컴포넌트들을 그룹화 */}
-          <View style={styles.textContainer}>
-            <ThemedText style={styles.title}>Hi Korea</ThemedText>
-            <ThemedText style={styles.subtitle}>Your Special Trip to Korea</ThemedText>
+        <ThemedView style={ styles.formContainer }>
+          {/* View를 사용하여 텍스트 컴포넌트들을 그룹화 */ }
+          <View style={ styles.textContainer }>
+            <ThemedText style={ styles.title }>Hi Korea</ThemedText>
+            <ThemedText style={ styles.subtitle }>Your Special Trip to Korea</ThemedText>
           </View>
 
-          <View style={styles.inputContainer}>
+          <View style={ styles.inputContainer }>
             <TextInput
-                style={styles.input}
+                style={ styles.input }
                 placeholder="Email"
                 placeholderTextColor="#666"
-                value={email}
-                onChangeText={handleEmailChange}
+                value={ email }
+                onChangeText={ handleEmailChange }
                 autoCapitalize="none"
                 keyboardType="email-address"
             />
             <TextInput
-                style={styles.input}
+                style={ styles.input }
                 placeholder="Password"
                 placeholderTextColor="#666"
-                value={password}
-                onChangeText={handlePasswordChange}
+                value={ password }
+                onChangeText={ handlePasswordChange }
                 secureTextEntry
             />
           </View>
 
-          {/* 에러 메시지를 별도의 View로 감싸기 */}
-          {errors||loginError ? (
-              <View style={styles.errorContainer}>
-                <ThemedText style={styles.error}>{loginError}</ThemedText>
+          { (errors || loginError) && (
+              <View style={ styles.errorContainer }>
+                { errors && Object.entries(errors).map(([field, error]) => (
+                    <Text
+                        key={ field }
+                        style={ styles.error }
+                    >
+                      { error?.message?.toString() || '' }
+                    </Text>
+                )) }
+                { loginError && (
+                    <Text style={ styles.error }>
+                      { loginError }
+                    </Text>
+                ) }
               </View>
-          ) : null}
+          ) }
 
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.button} onPress={handleLogin}>
-              <ThemedText style={styles.buttonText}>로그인</ThemedText>
+          <View style={ styles.buttonContainer }>
+            <TouchableOpacity
+                style={ styles.button }
+                onPress={ handleLogin }
+            >
+              <ThemedText style={ styles.buttonText }>로그인</ThemedText>
             </TouchableOpacity>
           </View>
 
-          <View style={styles.socialButtonsContainer}>
+          <View style={ styles.socialButtonsContainer }>
             <SocialLoginButtons
-                onGoogleLogin={handleGoogleLogin}
-                onAppleLogin={handleAppleLogin}
+                onGoogleLogin={ handleGoogleLogin }
+                onAppleLogin={ handleAppleLogin }
             />
           </View>
         </ThemedView>

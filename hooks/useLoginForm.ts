@@ -1,52 +1,40 @@
-import { useState } from "react";
+import { useEffect } from "react";
 import { Schema } from "@/utils/zod";
 import { z } from 'zod';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 
-type ValidationErrors = {
-  email?: string;
-  password?: string;
-};
+type LoginFormInputs = z.infer<typeof Schema>;
 
 export const useLoginForm = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [errors, setErrors] = useState<ValidationErrors>({});
+  const form = useForm<LoginFormInputs>({
+    resolver: zodResolver(Schema),
+    defaultValues: {
+      email: '',
+      password: ''
+    }
+  });
+
+  const { setValue, watch, formState: { errors } } = form;
+
+
+  useEffect(() => {
+    if(__DEV__) {
+      setValue('email', 'test@example.com');
+      setValue('password', 'password123!');
+    }
+  }, [setValue]);
 
   const validateForm = () => {
-    try {
-      Schema.parse({email, password})
-      setErrors({})
-      return true
-    } catch (error) {
-      if(error instanceof z.ZodError) {
-        const newErrors: ValidationErrors = {}
-        error.errors.forEach((err) => {
-          if(err.path[0]) {
-            newErrors[err.path[0] as keyof ValidationErrors] = err.message
-          }
-        })
-        setErrors(newErrors)
-      }
-      return false
-    }
-  }
-
-  const handleEmailChange = (value: string) => {
-    setEmail(value);
-    setErrors((prev) => ({ ...prev, email: undefined }));
-  };
-
-  const handlePasswordChange = (value: string) => {
-    setPassword(value);
-    setErrors((prev) => ({ ...prev, password: undefined }));
+    return form.trigger();
   };
 
   return {
-    email,
-    password,
+    email: watch('email'),
+    password: watch('password'),
     errors,
-    handleEmailChange,
-    handlePasswordChange,
+    handleEmailChange: (value: string) => setValue('email', value),
+    handlePasswordChange: (value: string) => setValue('password', value),
     validateForm,
   };
 }

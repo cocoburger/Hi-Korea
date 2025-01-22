@@ -1,7 +1,9 @@
 // types/auth.ts
+import { mockOAuthResponses } from "@/data/testOauthUserData";
+
 export type OAuthProvider = 'google' | 'apple' | 'kakao' | 'naver';  // 필요한 제공자 추가 가능
 
-export interface OAuthCredential {
+export type OAuthCredential = {
   provider: OAuthProvider;
   token: string;
   // 제공자별로 다른 추가 정보를 포함할 수 있음
@@ -14,7 +16,7 @@ export interface OAuthCredential {
 }
 
 
-interface AuthenticationResult {
+export type AuthenticationResult = {
   success: boolean;
   userInfo?: {
     id: string;
@@ -25,7 +27,18 @@ interface AuthenticationResult {
   };
   error?: string;
 }
+
 async function handleGoogleAuthentication(credential: OAuthCredential): Promise<AuthenticationResult> {
+  if(__DEV__) {
+    // 개발 환경에서는 mock 데이터 반환
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve(mockOAuthResponses.google);
+      }, 500); // 실제 API 호출처럼 보이게 약간의 딜레이 추가
+    });
+  }
+
+
   try {
     // 1. Google 토큰 검증
     const response = await fetch('https://your-backend-api/auth/google', {
@@ -40,7 +53,7 @@ async function handleGoogleAuthentication(credential: OAuthCredential): Promise<
       })
     });
 
-    if (!response.ok) {
+    if(!response.ok) {
       throw new Error('Failed to authenticate with server');
     }
 
@@ -66,6 +79,15 @@ async function handleGoogleAuthentication(credential: OAuthCredential): Promise<
 }
 
 async function handleAppleAuthentication(credential: OAuthCredential): Promise<AuthenticationResult> {
+  if(__DEV__) {
+    // 개발 환경에서는 mock 데이터 반환
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve(mockOAuthResponses.google);
+      }, 500); // 실제 API 호출처럼 보이게 약간의 딜레이 추가
+    });
+  }
+
   try {
     // 1. Apple 토큰 검증
     const response = await fetch('https://your-backend-api/auth/apple', {
@@ -80,7 +102,7 @@ async function handleAppleAuthentication(credential: OAuthCredential): Promise<A
       })
     });
 
-    if (!response.ok) {
+    if(!response.ok) {
       throw new Error('Failed to authenticate with server');
     }
 
@@ -106,7 +128,6 @@ async function handleAppleAuthentication(credential: OAuthCredential): Promise<A
 }
 
 
-
 async function handleOAuthLogin(credential: OAuthCredential) {
   // 실제 구현에서는 서버에 인증 요청을 보내고 응답을 처리
   switch (credential.provider) {
@@ -118,7 +139,7 @@ async function handleOAuthLogin(credential: OAuthCredential) {
       return handleAppleAuthentication(credential);
       // 다른 제공자들 추가 가능
     default:
-      throw new Error(`Unsupported OAuth provider: ${credential.provider}`);
+      throw new Error(`Unsupported OAuth provider: ${ credential.provider }`);
   }
 }
 
