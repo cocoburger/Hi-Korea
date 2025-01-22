@@ -1,50 +1,120 @@
-import { Redirect, Tabs } from 'expo-router';
-import React from 'react';
-import { Platform } from 'react-native';
+import { Tabs } from "expo-router";
+import { Platform } from "react-native";
+import { XStack, Text, YStack } from "tamagui";
+import { IconSymbol } from "@/components/ui/IconSymbol";
+import { useColorScheme } from "@/hooks/useColorScheme";
 
-import { HapticTab } from '@/components/HapticTab';
-import { IconSymbol } from '@/components/ui/IconSymbol';
-import TabBarBackground from '@/components/ui/TabBarBackground';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
-import { useAuth } from "@/contexts/AuthContext";
+const TAB_ITEMS = [
+  {
+    name: "index",
+    title: "Home",
+    icon: "house",
+    activeIcon: "house.fill",
+  },
+  {
+    name: "food",
+    title: "food",
+    icon: "fork.knife",
+    activeIcon: "fork.knife",
+  },
+  {
+    name: "map",
+    title: "map",
+    icon: "magnifyingglass",
+    activeIcon: "magnifyingglass.circle",
+  },
+  {
+    name: "favorite",
+    title: "favorite",
+    icon: "camera",
+    activeIcon: "camera.fill",
+  },
+  {
+    name: "my",
+    title: "my",
+    icon: "person",
+    activeIcon: "person.fill",
+  },
+] as const;
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
-  const { isAuthenticated } = useAuth();
+  const isDark = colorScheme === "dark";
 
-  // 인증되지 않은 사용자는 로그인 페이지로 리다이렉트
-  if (!isAuthenticated) {
-    return <Redirect href="/login" />;
-  }
   return (
-      <Tabs
-          screenOptions={{
-            tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-            headerShown: false,
-            tabBarButton: HapticTab,
-            tabBarBackground: TabBarBackground,
-            tabBarStyle: Platform.select({
-              ios: {
-                position: 'absolute',
-              },
-              default: {},
-            }),
-          }}>
+    <Tabs
+      screenOptions={{
+        headerShown: false,
+        tabBarShowLabel: true,
+        tabBarActiveTintColor: "#6366F1",
+        tabBarInactiveTintColor: isDark ? "#666666" : "#999999",
+        tabBarStyle: {
+          position: "absolute",
+          bottom: 0,
+          left: 0,
+          right: 0,
+          height: Platform.OS === "ios" ? 94 : 68,
+          backgroundColor: isDark ? "#000000" : "#FFFFFF",
+          borderTopWidth: 0,
+          paddingHorizontal: 16,
+          paddingTop: 12,
+          paddingBottom: Platform.OS === "ios" ? 28 : 12,
+        },
+        tabBarButton: (props) => {
+          const { children, accessibilityState, onPress } = props;
+          const isSelected = accessibilityState?.selected;
+
+          return (
+            <YStack
+              flex={1}
+              alignItems='center'
+              onPress={onPress}
+              backgroundColor={isSelected && isDark ? "#1A1A1A" : "transparent"}
+              borderRadius={20}
+              paddingVertical={8}
+            >
+              <XStack
+                alignItems='center'
+                space='$2'
+                opacity={isSelected ? 1 : 0.6}
+                backgroundColor={
+                  isSelected ? (isDark ? "#1A1A1A" : "#F3F4F6") : "transparent"
+                }
+                paddingHorizontal={12}
+                paddingVertical={6}
+                borderRadius={20}
+              >
+                {children}
+              </XStack>
+            </YStack>
+          );
+        },
+        tabBarIconStyle: {
+          marginBottom: 0,
+        },
+        tabBarLabelStyle: {
+          fontFamily: "Pretendard-Medium",
+          fontSize: 13,
+          marginLeft: 4,
+        },
+      }}
+    >
+      {TAB_ITEMS.map((item) => (
         <Tabs.Screen
-            name="index"
-            options={{
-              title: 'Home',
-              tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
-            }}
+          key={item.name}
+          name={item.name}
+          options={{
+            title: item.title,
+            tabBarIcon: ({ focused, color }) => (
+              <IconSymbol
+                name={focused ? item.activeIcon : item.icon}
+                size={20}
+                color={color}
+              />
+            ),
+          }}
         />
-        <Tabs.Screen
-            name="explore"
-            options={{
-              title: 'Explore',
-              tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
-            }}
-        />
-      </Tabs>
+      ))}
+    </Tabs>
   );
 }
