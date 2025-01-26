@@ -1,13 +1,7 @@
 import { Button, Text, styled } from "tamagui";
 
-export type ChipVariant =
-  | "red"
-  | "green"
-  | "blue"
-  | "purple"
-  | "pink"
-  | "orange";
-
+// 1. Variant 타입 재정의 (색상 기반)
+export type ChipVariant = 'red' | 'green' | 'blue' | 'purple' | 'pink' | 'orange';
 export type ChipSize = "small" | "medium" | "large" | "xlarge";
 
 const VARIANTS = {
@@ -47,7 +41,7 @@ const VARIANTS = {
     text: "#FF7847",
     borderColor: "#FFE4D6",
   },
-};
+} as const;
 
 const SIZE_STYLES = {
   small: {
@@ -76,7 +70,7 @@ const SIZE_STYLES = {
   },
 };
 
-interface ChipProps {
+type ChipProps = {
   label: string;
   variant?: ChipVariant;
   size?: ChipSize;
@@ -85,40 +79,41 @@ interface ChipProps {
 }
 
 export const Chip = ({
-  label,
-  variant = "blue",
-  size = "medium",
-  isSelected = false,
-  onPress,
-}: ChipProps) => {
+                       label,
+                       variant = "blue",
+                       size = "medium",
+                       isSelected = false,
+                       onPress,
+                     }: ChipProps) => {
   const variantStyle = VARIANTS[variant];
   const sizeStyle = SIZE_STYLES[size];
 
   return (
-    <Button
-      backgroundColor={isSelected ? variantStyle.hoverBg : variantStyle.bg}
-      paddingHorizontal={sizeStyle.paddingHorizontal}
-      paddingVertical={sizeStyle.paddingVertical}
-      height={sizeStyle.height}
-      borderRadius='$4'
-      borderWidth={1}
-      borderColor={variantStyle.borderColor}
-      pressStyle={{
-        backgroundColor: variantStyle.hoverBg,
-        scale: 0.98,
-      }}
-      onPress={onPress}
-      alignItems='center'
-      justifyContent='center'
-    >
-      <Text
-        color={variantStyle.text}
-        fontSize={sizeStyle.fontSize}
-        fontWeight={isSelected ? "bold" : "normal"}
-        textAlign='center'
+      <Button
+          backgroundColor={ isSelected ? variantStyle.hoverBg : variantStyle.bg }
+          paddingHorizontal={ sizeStyle.paddingHorizontal }
+          paddingVertical={ sizeStyle.paddingVertical }
+          height={ sizeStyle.height }
+          borderRadius="$4"
+          borderWidth={ 1 }
+          borderColor={ isSelected ? variantStyle.text : variantStyle.borderColor }
+          // borderColor={ variantStyle.borderColor }
+          pressStyle={ {
+            backgroundColor: variantStyle.hoverBg,
+            scale: 0.98,
+          } }
+          onPress={ onPress }
+          alignItems="center"
+          justifyContent="center"
       >
-        {label}
-      </Text>
-    </Button>
+        <Text
+            color={ variantStyle.text }
+            fontSize={ sizeStyle.fontSize }
+            fontWeight={ isSelected ? "bold" : "normal" }
+            textAlign="center"
+        >
+          { label }
+        </Text>
+      </Button>
   );
 };
