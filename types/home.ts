@@ -1,4 +1,9 @@
-import { VariantType, LayoutType, FilterType, SectionConfig } from './component';
+import {
+  VariantType,
+  LayoutType,
+  FilterType,
+  SectionConfig,
+} from "./component";
 import { Ionicons } from "@expo/vector-icons";
 import { ChipVariant } from "@/components/ui/Chip";
 
@@ -7,13 +12,12 @@ export type BaseResponse<T> = {
   data: T[];
   total: number;
   page: number;
-}
-
+};
 
 export type Category = {
   id: number;
   title: string;
-  variant: ChipVariant
+  variant: ChipVariant;
 };
 
 export type Recommendation = {
@@ -57,11 +61,11 @@ export type ResponsiveStyles = {
     subtitle: number;
     body: number;
     small: number;
-    caption: number;
+    caption?: number;
   };
   spacing: {
-    padding: string;
-    gap: string;
+    padding: number;
+    gap: number;
     screenPadding: number;
     cardGap: number;
   };
@@ -77,28 +81,25 @@ export type ResponsiveStyles = {
   };
 };
 
-
 export type PhotoSpotSectionProps = {
   layoutType?: LayoutType;
   filters?: FilterType[];
   sectionConfig?: SectionConfig;
-}
-
+};
 
 export type ExperienceType = {
   id: number;
   icon: string;
   title: string;
   description: string;
-}
-
+};
 
 export type IconName =
-    | 'camera-outline'
-    | 'restaurant-outline'
-    | 'walk-outline'
-    | 'leaf-outline'
-    | 'bed-outline'
-    | 'calendar-outline'
-    // 다른 Ionicons 이름 추가
-    | keyof typeof Ionicons.glyphMap; // Ionicons의 모든 가능한 이름 허용
+  | "camera-outline"
+  | "restaurant-outline"
+  | "walk-outline"
+  | "leaf-outline"
+  | "bed-outline"
+  | "calendar-outline"
+  // 다른 Ionicons 이름 추가
+  | keyof typeof Ionicons.glyphMap; // Ionicons의 모든 가능한 이름 허용

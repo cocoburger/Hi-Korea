@@ -12,6 +12,7 @@ export const MOCK_RECOMMENDATIONS: Recommendation[] = [
     description: "조선시대 대표 궁궐, 근정전과 경회루",
     location: "서울 종로구",
     imageUrl: "https://example.com/gyeongbokgung.jpg",
+    variant: "full"
   },
   {
     id: 2,
@@ -19,6 +20,7 @@ export const MOCK_RECOMMENDATIONS: Recommendation[] = [
     description: "서울의 상징적인 랜드마크",
     location: "서울 용산구",
     imageUrl: "https://example.com/namsan.jpg",
+    variant: "full"
   },
   {
     id: 3,
@@ -26,6 +28,7 @@ export const MOCK_RECOMMENDATIONS: Recommendation[] = [
     description: "전통 한옥이 보존된 문화거리",
     location: "서울 종로구",
     imageUrl: "https://example.com/bukchon.jpg",
+    variant: "full"
   },
 ];
 
