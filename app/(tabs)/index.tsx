@@ -102,14 +102,14 @@ const RecommendationCard = ({ styles }: CardProps) => (
     marginRight={styles.spacing.gap}
   >
     <Stack height={140} backgroundColor='$gray2' borderRadius='$4' />
-    <YStack padding={styles.spacing.padding} space='$1'>
+    <YStack padding={styles.spacing.padding} gap='$1'>
       <Text fontWeight='bold' numberOfLines={1} fontSize={styles.fontSize.body}>
         추천 장소 이름
       </Text>
       <Text fontSize={styles.fontSize.small} color='$gray11' numberOfLines={2}>
         간단한 설명이 들어갑니다.
       </Text>
-      <XStack alignItems='center' space='$2' marginTop='$1'>
+      <XStack alignItems='center' gap='$2' marginTop='$1'>
         <Ionicons
           name='location'
           size={styles.iconSize.small}
@@ -133,7 +133,7 @@ const MoreButton = ({
     pressStyle={{ opacity: 0.8 }}
     onPress={onPress}
   >
-    <XStack alignItems='center' space='$1'>
+    <XStack alignItems='center' gap='$1'>
       <Text color='$mint9' fontSize={styles.fontSize.body}>
         더보기
       </Text>
@@ -162,11 +162,11 @@ const PhotoSpotCard = ({ styles, width }: PhotoSpotCardProps) => (
     marginRight={styles.spacing.gap}
   >
     <Stack aspectRatio={1} backgroundColor='$gray2' borderRadius='$4' />
-    <YStack padding={styles.spacing.padding} space='$1'>
+    <YStack padding={styles.spacing.padding} gap='$1'>
       <Text fontWeight='bold' numberOfLines={1} fontSize={styles.fontSize.body}>
         포토 스팟 이름
       </Text>
-      <XStack alignItems='center' space='$2'>
+      <XStack alignItems='center' gap='$2'>
         <Ionicons name='heart' size={styles.iconSize.small} color='#666666' />
         <Text fontSize={styles.fontSize.small} color='$gray10'>
           좋아요 수
@@ -254,7 +254,7 @@ export default function HomeScreen() {
         <Text fontSize={styles.fontSize.title} fontWeight='bold'>
           로고
         </Text>
-        <XStack space={styles.spacing.gap}>
+        <XStack gap={styles.spacing.gap}>
           <Ionicons
             name='location-outline'
             size={styles.iconSize.large}
@@ -304,7 +304,7 @@ export default function HomeScreen() {
           paddingBottom: bottomTabHeight + insets.bottom,
         }}
       >
-        <YStack padding={styles.spacing.padding} space={styles.spacing.gap}>
+        <YStack padding={styles.spacing.padding} gap={styles.spacing.gap}>
           {/* Today's Recommendations */}
           <YStack>
             <Text
@@ -388,7 +388,7 @@ export default function HomeScreen() {
             >
               요즘 뜨는 맛집
             </Text>
-            <YStack space={styles.spacing.gap}>
+            <YStack gap={styles.spacing.gap}>
               {[1, 2, 3].map((i) => (
                 <RestaurantCard key={i} styles={styles} />
               ))}
@@ -404,7 +404,7 @@ export default function HomeScreen() {
             >
               추천 여행 코스
             </Text>
-            <YStack space={styles.spacing.gap}>
+            <YStack gap={styles.spacing.gap}>
               {[1, 2].map((i) => (
                 <TravelCourseCard key={i} styles={styles} />
               ))}

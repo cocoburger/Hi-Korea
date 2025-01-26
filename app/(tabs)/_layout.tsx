@@ -13,25 +13,25 @@ const TAB_ITEMS = [
   },
   {
     name: "food",
-    title: "food",
+    title: "Food",
     icon: "fork.knife",
     activeIcon: "fork.knife",
   },
   {
     name: "map",
-    title: "map",
+    title: "Map",
     icon: "magnifyingglass",
     activeIcon: "magnifyingglass.circle",
   },
   {
     name: "favorite",
-    title: "favorite",
+    title: "Favorite",
     icon: "camera",
     activeIcon: "camera.fill",
   },
   {
     name: "my",
-    title: "my",
+    title: "My",
     icon: "person",
     activeIcon: "person.fill",
   },
@@ -75,7 +75,7 @@ export default function TabLayout() {
             >
               <XStack
                 alignItems='center'
-                space='$2'
+                gap='$2'
                 opacity={isSelected ? 1 : 0.6}
                 backgroundColor={
                   isSelected ? (isDark ? "#1A1A1A" : "#F3F4F6") : "transparent"
