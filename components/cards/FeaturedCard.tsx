@@ -32,7 +32,7 @@ export function FeaturedCard({
           height={120}
           resizeMode='cover'
         />
-        <YStack padding='$3' space='$1'>
+        <YStack padding='$3' gap='$1'>
           <Text fontSize='$5' fontWeight='600' numberOfLines={1}>
             {title}
           </Text>

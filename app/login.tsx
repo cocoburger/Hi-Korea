@@ -106,7 +106,7 @@ export default function LoginScreen() {
               onSubmit={handleLogin}
             />
 
-            <YStack space='$2' alignItems='center'>
+            <YStack gap='$2' alignItems='center'>
               <SocialLoginButtons
                 onGoogleLogin={handleGoogleLogin}
                 onAppleLogin={handleAppleLogin}

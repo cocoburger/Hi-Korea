@@ -38,7 +38,7 @@ export function RecommendationCard({
           resizeMode='cover'
         />
         <YStack flex={1} padding='$3' justifyContent='space-between'>
-          <YStack space='$1'>
+          <YStack gap='$1'>
             <Text fontSize='$5' fontWeight='600' numberOfLines={1}>
               {title}
             </Text>
@@ -46,7 +46,7 @@ export function RecommendationCard({
               {category}
             </Text>
           </YStack>
-          <XStack alignItems='center' space='$2'>
+          <XStack alignItems='center' gap='$2'>
             <IconSymbol name='star.fill' size={16} color='$yellow10' />
             <Text fontSize='$3' fontWeight='600'>
               {rating}

@@ -27,7 +27,7 @@ export function SocialLoginButtons({
   }
 
   return (
-    <YStack space='$3' width='100%'>
+    <YStack gap='$3' width='100%'>
       <Button
         backgroundColor='#4285F4'
         height={44}
@@ -38,7 +38,7 @@ export function SocialLoginButtons({
           opacity: 0.9,
         }}
       >
-        <XStack alignItems='center' justifyContent='center' space='$2'>
+        <XStack alignItems='center' justifyContent='center' gap='$2'>
           <AntDesign name='google' size={18} color='white' />
           <Text color='white' fontWeight='600' fontSize={16}>
             Google로 계속하기

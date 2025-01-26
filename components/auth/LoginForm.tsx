@@ -20,7 +20,7 @@ export function LoginForm({
   onSubmit,
 }: LoginFormProps) {
   return (
-    <YStack space='$4' width='100%'>
+    <YStack gap='$4' width='100%'>
       <StyledInput
         placeholder='Email'
         value={email}

@@ -19,7 +19,7 @@ export function CategoryCard({ icon, title, onPress }: CategoryCardProps) {
       padding='$2'
       pressStyle={{ opacity: 0.8 }}
     >
-      <YStack flex={1} alignItems='center' justifyContent='center' space='$2'>
+      <YStack flex={1} alignItems='center' justifyContent='center' gap='$2'>
         <Ionicons name={icon} size={32} color='$primary' />
         <Text fontSize='$3' color='$gray12'>
           {title}
