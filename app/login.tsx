@@ -10,6 +10,7 @@ import { YStack, Text } from "tamagui";
 import { Card, Title, Subtitle } from "@/components/ui/styled";
 import { LoginForm } from "@/components/auth/LoginForm";
 import { SocialLoginButtons } from "@/components/auth/SocialLoginButtons";
+import { SignUpButton } from "@/components/auth/SignUpButton";
 
 const { width } = Dimensions.get("window");
 
@@ -27,12 +28,12 @@ export default function LoginScreen() {
   const { handleGoogleLogin, handleAppleLogin } = useOAuth({
     onSuccess: async (credential) => {
       const success = await loginWithOAuth(credential);
-      if (success) {
+      if(success) {
         router.replace("/(tabs)");
       }
     },
     onError: (error, provider) => {
-      console.error(`${provider} login failed:`, error);
+      console.error(`${ provider } login failed:`, error);
       // 에러 처리
     },
   });
@@ -41,23 +42,23 @@ export default function LoginScreen() {
   const [isLoading, setIsLoading] = useState(true);
 
   const handleLogin = async () => {
-    if (__DEV__) {
+    if(__DEV__) {
       // 개발모드에서만 하드코딩 로그인 메시지 표시
       console.log("개발모드: 테스트계정 로그인 완료");
     }
 
-    if (!validateForm()) {
+    if(!validateForm()) {
       console.log("Form validation failed");
       return;
     }
 
     try {
       const success = await login(email, password);
-      if (success) {
+      if(success) {
         router.replace("/(tabs)");
       } else {
         setLoginError(
-          "로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요."
+            "로그인에 실패했습니다. 이메일과 비밀번호를 확인해주세요."
         );
       }
     } catch (err) {
@@ -76,7 +77,7 @@ export default function LoginScreen() {
     });
   }, []);
 
-  if (isLoading) {
+  if(isLoading) {
     return null; // 또는 로딩 스피너
   }
 
@@ -86,36 +87,57 @@ export default function LoginScreen() {
   });
 
   return (
-    <LinearGradient
-      colors={["#52BEB5", "#73B2D9", "#FFE5E5"]}
-      style={{ flex: 1 }}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 1, y: 1 }}
-    >
-      <YStack flex={1} padding='$4' justifyContent='center' alignItems='center'>
-        <Card>
-          <YStack space='$4'>
-            <Title>Hi Korea</Title>
-            <Subtitle>Your Special Trip to Korea</Subtitle>
-            <LoginForm
-              email={email}
-              password={password}
-              errors={errors}
-              onEmailChange={handleEmailChange}
-              onPasswordChange={handlePasswordChange}
-              onSubmit={handleLogin}
-            />
-
-            <YStack gap='$2' alignItems='center'>
-              <SocialLoginButtons
-                onGoogleLogin={handleGoogleLogin}
-                onAppleLogin={handleAppleLogin}
+      <LinearGradient
+          colors={ ["#52BEB5", "#73B2D9", "#FFE5E5"] }
+          style={ { flex: 1 } }
+          start={ { x: 0, y: 0 } }
+          end={ { x: 1, y: 1 } }
+      >
+        <YStack
+            flex={ 1 }
+            padding='$4'
+            justifyContent='center'
+            alignItems='center'
+        >
+          <Card>
+            <YStack gap='$4'>
+              <Title>Hi Korea</Title>
+              <Subtitle>Your Special Trip to Korea</Subtitle>
+              <LoginForm
+                  email={ email }
+                  password={ password }
+                  errors={ errors }
+                  onEmailChange={ handleEmailChange }
+                  onPasswordChange={ handlePasswordChange }
+                  onSubmit={ handleLogin }
               />
+
+              <YStack
+                  gap='$2'
+                  alignItems='center'
+              >
+                <SocialLoginButtons
+                    onGoogleLogin={ handleGoogleLogin }
+                    onAppleLogin={ handleAppleLogin }
+                />
+              </YStack>
+              <YStack
+                  gap='$2'
+                  alignItems='center'
+              >
+                <SignUpButton
+                    variant="secondary"
+                    size="large"
+                    iconName="mail"
+                    marginTop="$4"
+                >
+                  <Text>SIGN UP</Text>
+                </SignUpButton>
+              </YStack>
             </YStack>
-          </YStack>
-        </Card>
-      </YStack>
-    </LinearGradient>
+          </Card>
+        </YStack>
+      </LinearGradient>
   );
 }
 
