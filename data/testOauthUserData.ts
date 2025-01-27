@@ -1,6 +1,11 @@
-import { AuthenticationResult, OAuthProvider } from "@/types/auth";
+import { AuthenticationResult, AuthProvider } from "@/types/auth";
 
-export const mockOAuthResponses: Record<OAuthProvider, AuthenticationResult> = {
+export const mockOAuthResponses: {
+  apple: { userInfo: { name: string; id: string; email: string }; success: boolean };
+  kakao: { userInfo: { name: string; id: string; email: string; picture: string }; success: boolean };
+  google: { userInfo: { name: string; id: string; email: string; picture: string }; success: boolean };
+  naver: { userInfo: { name: string; id: string; email: string; picture: string }; success: boolean }
+} = {
   google: {
     success: true,
     userInfo: {

@@ -2,16 +2,17 @@ import { useCallback, useEffect } from 'react';
 import * as WebBrowser from 'expo-web-browser';
 import * as Google from "expo-auth-session/providers/google";
 import * as AppleAuthentication from 'expo-apple-authentication';
-import { OAuthCredential, OAuthProvider } from "@/types/auth";
+import { OAuthCredential, AuthProvider } from "@/types/auth";
 
 WebBrowser.maybeCompleteAuthSession();
 
 
 interface OAuthHookProps {
   onSuccess?: (credential: OAuthCredential) => void;
-  onError?: (error: Error, provider: OAuthProvider) => void;
+  onError?: (error: Error, provider: AuthProvider) => void;
 }
-export function useOAuth(props?: OAuthHookProps ) {
+
+export function useOAuth(props?: OAuthHookProps) {
 
   // Google OAuth 설정
   const [request, response, promptAsync] = Google.useAuthRequest({
@@ -24,7 +25,7 @@ export function useOAuth(props?: OAuthHookProps ) {
     try {
       const result = await promptAsync();
 
-      if (result?.type === 'success' && result.authentication?.accessToken) {
+      if(result?.type === 'success' && result.authentication?.accessToken) {
         // Google 사용자 정보 가져오기
         const userInfo = await fetchGoogleUserInfo(result.authentication.accessToken);
 
@@ -48,7 +49,7 @@ export function useOAuth(props?: OAuthHookProps ) {
   const handleAppleLogin = useCallback(async (appleCredential: AppleAuthentication.AppleAuthenticationCredential) => {
     try {
       // identityToken이 null인 경우를 명시적으로 처리
-      if (!appleCredential.identityToken) {
+      if(!appleCredential.identityToken) {
         throw new Error('Apple authentication failed: No identity token received');
       }
 
@@ -60,7 +61,7 @@ export function useOAuth(props?: OAuthHookProps ) {
           ...(appleCredential.email && { email: appleCredential.email }),
           // fullName이 null이 아닐 때만 포함
           ...(appleCredential.fullName && {
-            name: `${appleCredential.fullName.givenName || ''} ${appleCredential.fullName.familyName || ''}`.trim()
+            name: `${ appleCredential.fullName.givenName || '' } ${ appleCredential.fullName.familyName || '' }`.trim()
           })
         }
       };
@@ -86,7 +87,7 @@ export function useOAuth(props?: OAuthHookProps ) {
 // 구글 사용자 정보를 가져오는 유틸리티 함수 (선택 사항)
 async function fetchGoogleUserInfo(accessToken: string) {
   const response = await fetch('https://www.googleapis.com/userinfo/v2/me', {
-    headers: { Authorization: `Bearer ${accessToken}` },
+    headers: { Authorization: `Bearer ${ accessToken }` },
   });
   return response.json();
 }

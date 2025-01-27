@@ -4,25 +4,27 @@ import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import { useAuth } from "@/contexts/AuthContext";
 import { useOAuth } from "@/hooks/useOAuth";
+import * as AppleAuthentication from "expo-apple-authentication";
 
-import { useLoginForm } from "@/hooks/useLoginForm";
 import { YStack, Text } from "tamagui";
 import { Card, Title, Subtitle } from "@/components/ui/styled";
 import { LoginForm } from "@/components/auth/LoginForm";
-import { SocialLoginButtons } from "@/components/auth/SocialLoginButtons";
-import { SignUpButton } from "@/components/auth/SignUpButton";
+import { AuthButton } from "@/components/auth/SignUpButton";
+import { useAppleAuth } from "@/hooks/useAppleAuth";
+import { useAuthForm } from "@/hooks/useAuthForm";
 
 const { width } = Dimensions.get("window");
 
 export default function LoginScreen() {
   const {
-    email,
-    password,
+    form,
+    values,
     errors,
-    handleEmailChange,
-    handlePasswordChange,
+    handleChange,
     validateForm,
-  } = useLoginForm();
+  } = useAuthForm({
+    mode: 'login',
+  });
 
   const { login, loginWithOAuth } = useAuth();
   const { handleGoogleLogin, handleAppleLogin } = useOAuth({
@@ -38,8 +40,13 @@ export default function LoginScreen() {
     },
   });
 
+  const { handleAppleSignIn } = useAppleAuth(handleAppleLogin);
+
+
   const [loginError, setLoginError] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [isAppleAuthAvailable, setIsAppleAuthAvailable] = useState<boolean | null>(null);
+
 
   const handleLogin = async () => {
     if(__DEV__) {
@@ -53,7 +60,7 @@ export default function LoginScreen() {
     }
 
     try {
-      const success = await login(email, password);
+      const success = await login(values.email, values.password);
       if(success) {
         router.replace("/(tabs)");
       } else {
@@ -75,6 +82,10 @@ export default function LoginScreen() {
     ]).finally(() => {
       setIsLoading(false);
     });
+  }, []);
+
+  useEffect(() => {
+    AppleAuthentication.isAvailableAsync().then(setIsAppleAuthAvailable);
   }, []);
 
   if(isLoading) {
@@ -104,11 +115,11 @@ export default function LoginScreen() {
               <Title>Hi Korea</Title>
               <Subtitle>Your Special Trip to Korea</Subtitle>
               <LoginForm
-                  email={ email }
-                  password={ password }
+                  email={ values.email }
+                  password={ values.password }
                   errors={ errors }
-                  onEmailChange={ handleEmailChange }
-                  onPasswordChange={ handlePasswordChange }
+                  onEmailChange={ handleChange('email') }
+                  onPasswordChange={ handleChange('password') }
                   onSubmit={ handleLogin }
               />
 
@@ -116,23 +127,43 @@ export default function LoginScreen() {
                   gap='$2'
                   alignItems='center'
               >
-                <SocialLoginButtons
-                    onGoogleLogin={ handleGoogleLogin }
-                    onAppleLogin={ handleAppleLogin }
-                />
+                <AuthButton
+                    variant="google"
+                    onPress={ handleGoogleLogin }
+                >
+                  Google로 계속하기
+                </AuthButton>
+
+                { isAppleAuthAvailable && (
+                    <AppleAuthentication.AppleAuthenticationButton
+                        buttonType={ AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN }
+                        buttonStyle={ AppleAuthentication.AppleAuthenticationButtonStyle.BLACK }
+                        cornerRadius={ 8 }
+                        style={ { width: "100%", height: 44 } }
+                        onPress={ handleAppleSignIn }
+                    />
+                ) }
               </YStack>
+
               <YStack
-                  gap='$2'
+                  gap='$4'
                   alignItems='center'
               >
-                <SignUpButton
-                    variant="secondary"
-                    size="large"
-                    iconName="mail"
-                    marginTop="$4"
+                <AuthButton
+                    variant='email'
+                    size='large'
+                    iconName='mail'
+                    marginTop='$6'
+                    onPress={ () => router.push("/signup") }
                 >
-                  <Text>SIGN UP</Text>
-                </SignUpButton>
+                  <Text
+                      color='black'
+                      fontWeight='600'
+                      fontSize={ 16 }
+                  >
+                    SIGN UP
+                  </Text>
+                </AuthButton>
               </YStack>
             </YStack>
           </Card>

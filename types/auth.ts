@@ -1,10 +1,32 @@
 // types/auth.ts
 import { mockOAuthResponses } from "@/data/testOauthUserData";
+import { Path } from "react-hook-form";
 
-export type OAuthProvider = 'google' | 'apple' | 'kakao' | 'naver';  // 필요한 제공자 추가 가능
+
+export type AuthProvider = 'email' | 'google' | 'apple' | 'kakao' | 'naver';  // 필요한 제공자 추가 가능
+
+export type FormMode = 'login' | 'signup';
+
+// 기본 로그인 폼 타입
+export interface LoginForm {
+  email: string;
+  password: string;
+}
+
+// 회원가입 폼 타입 (로그인 폼을 확장)
+export interface SignupForm extends LoginForm {
+  nickname: string;
+  confirmPassword: string;
+}
+
+
+export type FormValues = {
+  login: LoginForm;
+  signup: SignupForm;
+}
 
 export type OAuthCredential = {
-  provider: OAuthProvider;
+  provider: AuthProvider;
   token: string;
   // 제공자별로 다른 추가 정보를 포함할 수 있음
   additionalInfo?: {

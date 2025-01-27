@@ -1,81 +1,80 @@
-import { Button, ButtonText, Spinner, styled } from "tamagui";
-import { Ionicons } from "@expo/vector-icons";
 import React from "react";
+import { Button, styled } from "tamagui";
+import { AntDesign, Ionicons } from "@expo/vector-icons";
 
-export const CustomButton = styled(Button, {
-  name: "SignUpButton",
-  backgroundColor: "$blue8",
-  borderRadius: "$4",
+
+const ButtonContainer = styled(Button, {
+  name: "AuthButton",
+  height: 44,
+  borderRadius: 4,
+  marginVertical: 6,
   pressStyle: {
-    scale: 0.98,
-    opacity: 0.9,
-  },
-
-  variants: {
-    variant: {
-      primary: {
-        bg: "$blue8",
-        color: "white",
-      },
-      secondary: {
-        bg: "$gray3",
-        color: "$gray12",
-      },
-    },
-    size: {
-      small: {
-        padding: "$2",
-        fontSize: "$3",
-      },
-      medium: {
-        padding: "$3",
-        fontSize: "$4",
-      },
-      large: {
-        padding: "$4",
-        fontSize: "$5",
-      },
-    },
-    disabled: {
-      true: {
-        opacity: 0.6,
-        pointerEvents: "none",
-      },
-    },
-  } as const,
-
-  defaultVariants: {
-    variant: "primary",
-    size: "medium",
+    opacity: 0.8,
   },
 });
 
-interface SignUpButtonProps {
+type ButtonVariant =
+    | "kakao"
+    | "naver"
+    | "google"
+    | "apple"
+    | "email"
+
+interface AuthButtonProps {
   children: React.ReactNode;
-  variant?: "primary" | "secondary";
-  size?: "small" | "medium" | "large";
+  onPress: () => void;
+  variant: ButtonVariant;
   iconName?: keyof typeof Ionicons.glyphMap;
+  size?: "small" | "medium" | "large";
   marginTop?: string;
 }
 
-export const SignUpButton = ({
-                               children,
-                               variant = "primary",
-                               size = "medium",
-                               iconName,
-                               marginTop,
-                             }: SignUpButtonProps) => {
+const getButtonStyles = (variant: ButtonVariant) => {
+  switch (variant) {
+    case "kakao":
+      return {
+        backgroundColor: "#FEE500",
+        color: "#000000",
+      };
+    case "naver":
+      return {
+        backgroundColor: "#03C75A",
+        color: "#FFFFFF",
+      };
+    case "google":
+      return {
+        backgroundColor: "#4285F4",
+        color: "#FFFFFF",
+      };
+    case "apple":
+      return {
+        backgroundColor: "#FFFFFF",
+        color: "#000000",
+      };
+    case "email":
+      return {
+        backgroundColor: "#03C75A",
+        color: "#374151",
+      };
+  }
+};
+
+export const AuthButton = ({
+                             onPress,
+                             variant,
+                             ...props
+                           }: AuthButtonProps) => {
+  const styles = getButtonStyles(variant);
+
+
   return (
-      <CustomButton>
-        { iconName && (
-            <Ionicons
-                name={ iconName }
-                size={ 20 }
-                color='$white'
-                style={ { marginRight: 8 } }
-            />
-        ) }
-        { children }
-      </CustomButton>
+      <ButtonContainer { ...getButtonStyles(variant) } onPress={ onPress } { ...props }>
+        { variant === 'google' && <AntDesign
+            name="google"
+            size={ 18 }
+            color={ styles.color }
+        /> }
+        { props.children }
+      </ButtonContainer>
   );
 };
