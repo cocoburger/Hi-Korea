@@ -1,28 +1,32 @@
-import { FormMode, FormValues } from "@/types/auth";
+import type { LoginForm, SignupForm } from "@/utils/zod";
+import { FormMode } from "@/types/auth";
 
-export const getDefaultValues = (mode: FormMode): FormValues[typeof mode] => ({
-  login: {
-    email: '',
-    password: ''
-  },
-  signup: {
-    email: '',
-    password: '',
-    confirmPassword: '',
-    nickname: ''
-  }
-}[mode]);
+type FormValues<T extends FormMode> =
+    T extends 'login' ? LoginForm : SignupForm;
 
+export const getDefaultValues = <T extends FormMode>(mode: T): { password: string; email: string } | {
+  password: string;
+  nickname: string;
+  confirmPassword: string;
+  email: string
+} => {
+  return mode === 'login'
+      ? { email: '', password: '' }
+      : { email: '', password: '', nickname: '', confirmPassword: '' };
+};
 
-export const getDevValues = (mode: 'login' | 'signup') => ({
-  login: {
-    email: 'test@example.com',
-    password: 'password123!'
-  },
-  signup: {
-    email: 'signup@example.com',
-    password: 'signup123!',
-    confirmPassword: 'signup123!',
-    nickname: 'tester'
-  }
-}[mode]);
+export const getDevValues = <T extends FormMode>(mode: T): { password: string; email: string } | {
+  password: string;
+  nickname: string;
+  confirmPassword: string;
+  email: string
+} => {
+  return mode === 'login'
+      ? { email: 'test@example.com', password: 'password123!' }
+      : {
+        email: 'test@example.com',
+        password: 'password123!',
+        nickname: 'tester',
+        confirmPassword: 'password123!'
+      };
+};

@@ -7,24 +7,6 @@ export type AuthProvider = 'email' | 'google' | 'apple' | 'kakao' | 'naver';  //
 
 export type FormMode = 'login' | 'signup';
 
-// 기본 로그인 폼 타입
-export interface LoginForm {
-  email: string;
-  password: string;
-}
-
-// 회원가입 폼 타입 (로그인 폼을 확장)
-export interface SignupForm extends LoginForm {
-  nickname: string;
-  confirmPassword: string;
-}
-
-
-export type FormValues = {
-  login: LoginForm;
-  signup: SignupForm;
-}
-
 export type OAuthCredential = {
   provider: AuthProvider;
   token: string;
